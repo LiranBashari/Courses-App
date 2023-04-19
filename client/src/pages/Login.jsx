@@ -38,7 +38,7 @@ function Login() {
             const data = await axios.post(login, {username,password})
             if (data === false) toast.error(data.msg,toastOptions)
             else {
-                localStorage.setItem("Courses", JSON.stringify(data.user))
+                localStorage.setItem("Courses", JSON.stringify(data.data.user))
                 navigate("/")
             }
         }

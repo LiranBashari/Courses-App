@@ -8,7 +8,7 @@ module.exports.login = async (req, res) => {
         if (!user) return res.json({status: false, msg:"Incorrect Username or Password"});
         const confirmPassword = await bcrypt.compare(password, user.password);
         if (!confirmPassword) return res.json({status: false, msg:"Incorrect Username or Password"});
-        return res.json({status: true, user});
+        return res.json({ user, status: true});
     } catch (e) {
         console.error(e);
     }

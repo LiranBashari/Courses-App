@@ -46,7 +46,7 @@ function Register() {
             const data = await axios.post(register, values)
             if (data.status === false) toast.error(data.msg, toastOptions);
             else {
-                localStorage.setItem('Courses', JSON.stringify(data.user));
+                localStorage.setItem('Courses', JSON.stringify(data.data.newUser));
                 navigate('/');
             }
         }
