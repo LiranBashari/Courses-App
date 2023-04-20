@@ -26,6 +26,9 @@ function Home() {
                 <div className="search-container">
                     <input className="search" type="text" placeholder="Search for courses..."/>
                 </div>
+                <div className="button-container">
+                    <button>All Courses</button>
+                </div>
             </div>
             <div className="courses">
 
@@ -66,11 +69,38 @@ const Container = styled.div`
       margin: 0 auto; /* center the container horizontally */
       .search {
         border-radius: 2rem;
-        padding: 0.8rem 2rem 0.8rem 3rem;
+        border-color: #61dafb;
+        padding: 0.8rem 1.5rem 0.8rem 3rem;
         font-size: larger;
+        background-color: transparent;
+      }
+    }
+    .button-container{
+      button{
+        display: inline-block;
+        outline: 0;
+        border: none;
+        box-shadow: none;
+        cursor: pointer;
+        padding: 9px 22px;
+        font-size: 22px;
+        height: 50px;
+        font-weight: 400;
+        color: #fff;
+        text-align: center;
+        line-height: normal;
+        background: linear-gradient(90deg,#299fff 0,#0074e4 100%);
+        border-radius: 50px;
+        transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+        margin-right: 10px;
+        :hover{
+          box-shadow: 0 0 0 0.15rem #5ceace;
+          transform: scale(1.04);
+        } 
       }
     }
   }
 
 
 `;
+
