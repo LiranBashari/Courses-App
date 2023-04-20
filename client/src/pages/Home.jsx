@@ -3,14 +3,14 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 
 function Home() {
-    const [username, setUsername] = useState()
+    const [userData, setUserData] = useState({})
     const navigate = useNavigate()
 
     useEffect(()=>{
         async function fetchUserData(){
             if (!localStorage.getItem("Courses")) navigate("/login");
             else {
-                setUsername(JSON.parse(localStorage.getItem("Courses")).username);
+                setUserData(JSON.parse(localStorage.getItem("Courses")))
             }
         }
         fetchUserData();
@@ -18,7 +18,9 @@ function Home() {
     return (
         <Container >
             <div className="header">
-                Welcome {username}!
+                <h1>
+                    Welcome {userData.username}!
+                </h1>
             </div>
             <div className="courses">
 
