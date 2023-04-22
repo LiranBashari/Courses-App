@@ -2,9 +2,13 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import Logo from "../logo.svg"
+import Courses from "../components/Courses";
+import Updates from "../components/Updates";
+import AllCourses from "../components/AllCourses"
 
 function Home() {
     const [userData, setUserData] = useState({})
+    const [showAllCourses, setShowAllCourses] = useState(false);
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -27,12 +31,23 @@ function Home() {
                     <input className="search" type="text" placeholder="Search for courses..."/>
                 </div>
                 <div className="button-container">
-                    <button>All Courses</button>
+                    <button>Create Course</button>
+                    <button onClick={() => setShowAllCourses(!showAllCourses)}>
+                        {showAllCourses ? "Back to Home" : "All Courses"}
+                    </button>
+                    <button>Logout</button>
                 </div>
             </div>
-            <div className="courses">
 
-            </div>
+            {showAllCourses ? (
+                <AllCourses />
+            ) : (
+                <div className="body-container">
+                    <Courses />
+                    <Updates />
+                </div>
+            )}
+
         </Container>
     );
 }
@@ -66,7 +81,7 @@ const Container = styled.div`
     }
 
     .search-container {
-      margin: 0 auto; /* center the container horizontally */
+      margin: 0 auto;
       .search {
         border-radius: 2rem;
         border-color: #61dafb;
@@ -82,9 +97,9 @@ const Container = styled.div`
         border: none;
         box-shadow: none;
         cursor: pointer;
-        padding: 9px 22px;
-        font-size: 22px;
-        height: 50px;
+        padding: 7px 16px;
+        font-size: 18px;
+        height: 45px;
         font-weight: 400;
         color: #fff;
         text-align: center;
@@ -101,6 +116,18 @@ const Container = styled.div`
     }
   }
 
+  .body-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .body-container > :first-child {
+    width: 65%;
+  }
+
+  .body-container > :last-child {
+    width: 35%;
+  }
 
 `;
 
