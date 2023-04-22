@@ -5,10 +5,17 @@ import Logo from "../logo.svg"
 import Courses from "../components/Courses";
 import Updates from "../components/Updates";
 import AllCourses from "../components/AllCourses"
+import Modal from 'react-modal';
+
+// Set app element for Modal
+Modal.setAppElement('#root');
 
 function Home() {
     const [userData, setUserData] = useState({})
     const [showAllCourses, setShowAllCourses] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [courseName, setCourseName] = useState('');
+    const [courseDescription, setCourseDescription] = useState('');
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -20,6 +27,13 @@ function Home() {
         }
         fetchUserData();
     }, [])
+
+    const handleCreateCourse = () => {
+        // Code to create a new course goes here
+        // You can use the values of courseName and courseDescription to create the course
+        setModalIsOpen(false);
+    };
+
     return (
         <Container >
             <div className="header">
@@ -31,7 +45,8 @@ function Home() {
                     <input className="search" type="text" placeholder="Search for courses..."/>
                 </div>
                 <div className="button-container">
-                    <button>Create Course</button>
+                    <button onClick={()=> setModalIsOpen(true)} >Create Course</button>
+
                     <button onClick={() => setShowAllCourses(!showAllCourses)}>
                         {showAllCourses ? "Back to Home" : "All Courses"}
                     </button>
@@ -47,6 +62,101 @@ function Home() {
                     <Updates />
                 </div>
             )}
+
+            {/* Modal */}
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                style={{
+                    overlay: {
+                        backgroundColor: 'rgba(0,0,0,0.58)',
+                    },
+                    content: {
+                        backgroundColor: 'rgba(255,255,255,0.6)',
+                        width: '500px',
+                        height: '300px',
+                        margin: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        borderRadius: '2rem',
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'black transparent',
+
+                },
+                }}>
+                <h2>Create a New Course</h2>
+                <form className="form">
+                    <label style={{marginBottom: '10px'}}>
+                        Course Name:
+                        <input
+                            type="text"
+                            value={courseName}
+                            onChange={(e) => setCourseName(e.target.value)}
+                            style={{
+                                border: "0.1rem solid black",
+                                borderBottom: '2px solid black',
+                                backgroundColor: 'transparent',
+                                padding: '5px',
+                                fontSize: '1.2rem',
+                                borderRadius: '0.5rem',
+                                width: '100%',
+                            }}
+                        />
+                    </label>
+                    <label>
+                        Course Description:
+                        <textarea
+                            value={courseDescription}
+                            onChange={(e) => setCourseDescription(e.target.value)}
+                            style={{
+                                border: "0.1rem solid black",
+                                borderBottom: '2px solid black',
+                                backgroundColor: 'transparent',
+                                padding: '5px',
+                                fontSize: '1.2rem',
+                                borderRadius: '0.5rem',
+                                width: '100%',
+                                resize: 'vertical', /* set vertical resize only */
+                            }}
+                        />
+                    </label>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginTop: '20px' }}>
+                        <button
+                            onClick={handleCreateCourse}
+                            style={{
+                                backgroundColor: '#599ef8',
+                                color: 'white',
+                                padding: '10px 20px',
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1.2rem',
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#b1d2fc'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#599ef8'}>
+                            Create
+                        </button>
+                        <button
+                            onClick={() => setModalIsOpen(false)}
+                            style={{
+                                backgroundColor: '#ea5647',
+                                color: 'white',
+                                padding: '10px 20px',
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1.2rem',
+                                transition: 'background-color 0.3s ease-in-out', // add transition for smooth color change
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#fda498'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#ea5647'}>
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </Modal>
+
 
         </Container>
     );
@@ -82,6 +192,7 @@ const Container = styled.div`
 
     .search-container {
       margin: 0 auto;
+
       .search {
         border-radius: 2rem;
         border-color: #61dafb;
@@ -90,8 +201,9 @@ const Container = styled.div`
         background-color: transparent;
       }
     }
-    .button-container{
-      button{
+
+    .button-container {
+      button {
         display: inline-block;
         outline: 0;
         border: none;
@@ -104,14 +216,15 @@ const Container = styled.div`
         color: #fff;
         text-align: center;
         line-height: normal;
-        background: linear-gradient(90deg,#299fff 0,#0074e4 100%);
+        background: linear-gradient(90deg, #299fff 0, #0074e4 100%);
         border-radius: 50px;
-        transition: color .2s ease,background-color .2s ease,box-shadow .2s ease;
+        transition: color .2s ease, background-color .2s ease, box-shadow .2s ease;
         margin-right: 10px;
-        :hover{
+
+        :hover {
           box-shadow: 0 0 0 0.15rem #5ceace;
           transform: scale(1.04);
-        } 
+        }
       }
     }
   }
@@ -128,6 +241,5 @@ const Container = styled.div`
   .body-container > :last-child {
     width: 35%;
   }
-
+  
 `;
-
