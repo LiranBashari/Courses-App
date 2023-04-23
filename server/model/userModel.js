@@ -16,7 +16,11 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    courses: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Courses'
+    }]
 });
 
 const UserModel = mongoose.model('User', userSchema);

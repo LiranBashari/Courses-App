@@ -37,3 +37,13 @@ module.exports.register = async (req, res) => {
         console.error(e);
     }
 };
+
+
+module.exports.userCourses = async (req, res) => {
+    try {
+
+    } catch (e) {
+        console.error(e);
+    }
+};
+

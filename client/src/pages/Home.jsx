@@ -5,10 +5,10 @@ import Logo from "../logo.svg"
 import Courses from "../components/Courses";
 import Updates from "../components/Updates";
 import AllCourses from "../components/AllCourses"
+import {getCourses, getUserCourses} from "../routes";
+import axios from "axios";
 import Modal from 'react-modal';
-
-// Set app element for Modal
-Modal.setAppElement('#root');
+import { Button, AppBar, Toolbar, Typography} from '@material-ui/core';
 
 function Home() {
     const [userData, setUserData] = useState({})
@@ -17,6 +17,9 @@ function Home() {
     const [courseName, setCourseName] = useState('');
     const [courseDescription, setCourseDescription] = useState('');
     const navigate = useNavigate()
+    const [allCourses, setAllCourses] = useState({name: "", description: ""})
+    const [userCourses, setUserCourses] = useState({name: "", description: ""})
+
 
     useEffect(()=>{
         async function fetchUserData(){
@@ -28,9 +31,45 @@ function Home() {
         fetchUserData();
     }, [])
 
+    useEffect(() => {
+        async function fetchCourses() {
+            const courses = await axios.post(getCourses);
+            setAllCourses(courses.data);
+        }
+        fetchCourses();
+    }, []);
+
+    useEffect(() => {
+        async function fetchUserCourses() {
+            const userCourses = await axios.post(getUserCourses, {
+                _id: userData._id
+            });
+            setUserCourses(userCourses.data);
+        }
+        fetchUserCourses();
+    }, []);
+
     const handleCreateCourse = () => {
-        // Code to create a new course goes here
-        // You can use the values of courseName and courseDescription to create the course
+        // check if the course name is not empty
+        if (courseName.trim() !== "") {
+            // create a new course object with the name and description
+            const newCourse = {
+                name: courseName,
+                description: courseDescription,
+            };
+
+            // update the list of user courses
+            setUserCourses([...userCourses, newCourse]);
+
+            // update the list of all courses
+            setAllCourses([...allCourses, newCourse]);
+
+            // clear the form fields
+            setCourseName("");
+            setCourseDescription("");
+        }
+
+        // close the modal
         setModalIsOpen(false);
     };
 
@@ -53,17 +92,14 @@ function Home() {
                     <button>Logout</button>
                 </div>
             </div>
-
             {showAllCourses ? (
-                <AllCourses />
+                <AllCourses allCourses={allCourses}/>
             ) : (
                 <div className="body-container">
-                    <Courses />
+                    <Courses userCourses={userCourses}/>
                     <Updates />
                 </div>
             )}
-
-            {/* Modal */}
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
@@ -72,7 +108,7 @@ function Home() {
                         backgroundColor: 'rgba(0,0,0,0.58)',
                     },
                     content: {
-                        backgroundColor: 'rgba(255,255,255,0.6)',
+                        backgroundColor: 'rgba(255,255,255,0.85)',
                         width: '500px',
                         height: '300px',
                         margin: 'auto',
@@ -122,7 +158,7 @@ function Home() {
                         />
                     </label>
                     <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%', marginTop: '20px' }}>
-                        <button
+                        <Button
                             onClick={handleCreateCourse}
                             style={{
                                 backgroundColor: '#599ef8',
@@ -136,8 +172,8 @@ function Home() {
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#b1d2fc'}
                             onMouseLeave={(e) => e.target.style.backgroundColor = '#599ef8'}>
                             Create
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             onClick={() => setModalIsOpen(false)}
                             style={{
                                 backgroundColor: '#ea5647',
@@ -152,12 +188,10 @@ function Home() {
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#fda498'}
                             onMouseLeave={(e) => e.target.style.backgroundColor = '#ea5647'}>
                             Cancel
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </Modal>
-
-
         </Container>
     );
 }
@@ -241,5 +275,5 @@ const Container = styled.div`
   .body-container > :last-child {
     width: 35%;
   }
-  
+
 `;
