@@ -17,7 +17,6 @@ module.exports.login = async (req, res) => {
 module.exports.register = async (req, res) => {
     try {
         const {username, email, password} = req.body;
-        console.log("the body is: " , req.body)
         // first will check if user already exist
         const userExist = await User.findOne({username})
         if (userExist) return res.json({status: false, msg: "Username already in use"});
@@ -28,11 +27,11 @@ module.exports.register = async (req, res) => {
 
         // Add to DB but with encrypt password
         const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = User.create({
+        const newUser = await User.create({
             username, email, password: hashedPassword
         })
         console.log("before ret ", newUser)
-        return res.json({status:true, newUser});
+        return res.json({newUser, status:true});
     } catch (e) {
         console.error(e);
     }
@@ -41,9 +40,19 @@ module.exports.register = async (req, res) => {
 
 module.exports.userCourses = async (req, res) => {
     try {
-
+        console.log("you make it")
     } catch (e) {
         console.error(e);
     }
 };
+
+module.exports.addUserCourse = async (req, res) => {
+    try {
+        console.log("you make it")
+        res.json({status:true})
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 

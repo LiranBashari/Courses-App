@@ -3,9 +3,8 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import Logo from "../logo.svg"
 import Courses from "../components/Courses";
-import Updates from "../components/Updates";
 import AllCourses from "../components/AllCourses"
-import {getCourses, getUserCourses} from "../routes";
+import {getCourses, getUserCourses, addToAllCourses, addToUserCourses} from "../routes";
 import axios from "axios";
 import Modal from 'react-modal';
 import { Button, AppBar, Toolbar, Typography} from '@material-ui/core';
@@ -49,7 +48,14 @@ function Home() {
         fetchUserCourses();
     }, []);
 
-    const handleCreateCourse = () => {
+    const handleCancelModal = () => {
+        setCourseName("");
+        setCourseDescription("");
+        // close the modal
+        setModalIsOpen(false);
+    }
+
+    const handleCreateCourse = async () => {
         // check if the course name is not empty
         if (courseName.trim() !== "") {
             // create a new course object with the name and description
@@ -57,21 +63,33 @@ function Home() {
                 name: courseName,
                 description: courseDescription,
             };
+            try {
+                // send to server for validation and save in DB
+                const allData = await axios.post(addToAllCourses, newCourse);
+                const userData = await axios.post(addToUserCourses, newCourse);
 
-            // update the list of user courses
-            setUserCourses([...userCourses, newCourse]);
-
-            // update the list of all courses
-            setAllCourses([...allCourses, newCourse]);
-
-            // clear the form fields
-            setCourseName("");
-            setCourseDescription("");
+                if (allData.status && userData.status){
+                    // update the list of user courses
+                    setUserCourses([...userCourses, newCourse]);
+                    // update the list of all courses
+                    setAllCourses([...allCourses, newCourse]);
+                    // clear the form fields
+                    setCourseName("");
+                    setCourseDescription("");
+                    // close the modal
+                    setModalIsOpen(false);
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-
-        // close the modal
-        setModalIsOpen(false);
     };
+
+
+    function handleLogout() {
+        localStorage.clear();
+        navigate("/login")
+    }
 
     return (
         <Container >
@@ -89,7 +107,7 @@ function Home() {
                     <button onClick={() => setShowAllCourses(!showAllCourses)}>
                         {showAllCourses ? "Back to Home" : "All Courses"}
                     </button>
-                    <button>Logout</button>
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
             </div>
             {showAllCourses ? (
@@ -97,12 +115,12 @@ function Home() {
             ) : (
                 <div className="body-container">
                     <Courses userCourses={userCourses}/>
-                    <Updates />
                 </div>
             )}
             <Modal
+                appElement={document.getElementById('root')}
                 isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
+                onRequestClose={() => handleCancelModal()}
                 style={{
                     overlay: {
                         backgroundColor: 'rgba(0,0,0,0.58)',
@@ -138,6 +156,7 @@ function Home() {
                                 borderRadius: '0.5rem',
                                 width: '100%',
                             }}
+
                         />
                     </label>
                     <label>
@@ -174,7 +193,7 @@ function Home() {
                             Create
                         </Button>
                         <Button
-                            onClick={() => setModalIsOpen(false)}
+                            onClick={handleCancelModal}
                             style={{
                                 backgroundColor: '#ea5647',
                                 color: 'white',
@@ -269,11 +288,7 @@ const Container = styled.div`
   }
 
   .body-container > :first-child {
-    width: 65%;
-  }
-
-  .body-container > :last-child {
-    width: 35%;
+    width: 100%;
   }
 
 `;
