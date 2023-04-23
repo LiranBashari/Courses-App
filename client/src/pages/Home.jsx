@@ -17,8 +17,8 @@ function Home() {
     const [courseName, setCourseName] = useState('');
     const [courseDescription, setCourseDescription] = useState('');
     const navigate = useNavigate()
-    const [allCourses, setAllCourses] = useState({name: "", description: ""})
-    const [userCourses, setUserCourses] = useState({name: "", description: ""})
+    const [allCourses, setAllCourses] = useState([]);
+    const [userCourses, setUserCourses] = useState([]);
 
 
     useEffect(()=>{
