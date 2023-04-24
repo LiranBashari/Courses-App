@@ -1,5 +1,7 @@
 const User = require("../model/userModel")
+const Courses = require("../model/coursesModel");
 const bcrypt = require("bcrypt");
+
 
 module.exports.login = async (req, res) => {
     try {
@@ -30,26 +32,51 @@ module.exports.register = async (req, res) => {
         const newUser = await User.create({
             username, email, password: hashedPassword
         })
-        console.log("before ret ", newUser)
         return res.json({newUser, status:true});
     } catch (e) {
         console.error(e);
     }
 };
 
-
-module.exports.userCourses = async (req, res) => {
+module.exports.getUserCourses = async (req, res) => {
     try {
-        console.log("you make it")
+        const userData = req.body.userData
+        // find the user and populate the courses field
+        const userCourses = await User.findById(userData._id).populate('courses');
+        return res.json({userCourses});
     } catch (e) {
         console.error(e);
     }
 };
 
-module.exports.addUserCourse = async (req, res) => {
+module.exports.getAllCourses = async (req, res) => {
     try {
-        console.log("you make it")
-        res.json({status:true})
+        const courses = await Courses.find();
+        return res.json({courses});
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+module.exports.addCourse = async (req, res) => {
+    try {
+        const {userID, name, description} = req.body;
+
+        // check if the course exists
+        const course = await Courses.findOne({name:name});
+        if (course) return res.json({status: false, msg:"Course already exists"});
+
+        // create the new course
+        const newCourse = await Courses.create({name:name, description:description});
+
+        // add the new course to the user's courses array
+        const user = await User.findByIdAndUpdate(
+            userID,
+            { $push: { courses: newCourse._id } },
+            { new: true }
+        );
+
+        return res.json({newCourse, user, status:true});
     } catch (e) {
         console.error(e);
     }

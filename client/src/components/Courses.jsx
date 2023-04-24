@@ -4,7 +4,6 @@ import styled from "styled-components";
 function Courses(props) {
     // convert the object to an array
     const userCourses = Object.values(props.userCourses);
-
     return (
         <Container>
             <ul>

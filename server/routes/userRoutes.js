@@ -1,14 +1,11 @@
-const {login, register, userCourses, addUserCourse} = require("../controller/userController")
-const {allCourses, addAllCourse} = require("../controller/coursesController")
+const {login, register, getUserCourses, getAllCourses, addCourse} = require("../controller/userController")
 
 const router = require("express").Router();
 
 router.post("/login", login)
 router.post("/register", register)
-router.post("/allcourses", allCourses)
-router.post("/usercourses", userCourses)
-router.post("/addallcourse", addAllCourse)
-router.post("/addusercourse", addUserCourse)
-
+router.post("/allcourses", getAllCourses)
+router.post("/usercourses", getUserCourses)
+router.post("/addallcourse", addCourse)
 
 module.exports = router
