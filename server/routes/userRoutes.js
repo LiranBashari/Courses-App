@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 router.post("/login", login)
 router.post("/register", register)
-router.post("/allcourses", getAllCourses)
+router.get("/allcourses", getAllCourses)
 router.post("/usercourses", getUserCourses)
 router.post("/addallcourse", addCourse)
 

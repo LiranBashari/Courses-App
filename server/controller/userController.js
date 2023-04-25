@@ -40,10 +40,12 @@ module.exports.register = async (req, res) => {
 
 module.exports.getUserCourses = async (req, res) => {
     try {
-        const userData = req.body.userData
-        // find the user and populate the courses field
-        const userCourses = await User.findById(userData._id).populate('courses');
-        return res.json({userCourses});
+        const userID = req.body.userData
+        console.log("userID ",userID)
+        // find the users and populate the courses field
+        const userCourses = await User.findById(userID._id).populate('courses');
+        if (!userCourses) res.json({msg: "Can not fund user courses", status:false});
+        return res.json({userCourses, status:true});
     } catch (e) {
         console.error(e);
     }

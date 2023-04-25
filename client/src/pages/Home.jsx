@@ -25,16 +25,14 @@ function Home() {
     useEffect(()=>{
         async function fetchUserData(){
             if (!localStorage.getItem("Courses")) navigate("/login");
-            else {
-                setUserData(JSON.parse(localStorage.getItem("Courses")))
-            }
+            else setUserData(JSON.parse(localStorage.getItem("Courses")));
         }
         fetchUserData();
     }, [])
 
     useEffect(() => {
         async function fetchCourses() {
-            const courses = await axios.post(getCourses);
+            const courses = await axios.get(getCourses);
             setAllCourses(courses.data.courses);
         }
         fetchCourses();
@@ -42,10 +40,10 @@ function Home() {
 
     useEffect(() => {
         async function fetchUserCourses() {
-            const userCourses = await axios.post(getUserCourses, {
-                userData: userData,
-            });
-            setUserCourses(userCourses.data.userCourses.courses);
+            const userCourses = await axios.post(getUserCourses, {userData});
+            if (userCourses.data.status){
+                setUserCourses(userCourses.data.userCourses.courses);
+            }
         }
         fetchUserCourses();
     }, [userData]);
@@ -55,6 +53,11 @@ function Home() {
         setCourseDescription("");
         // close the modal
         setModalIsOpen(false);
+    }
+
+    function handleLogout() {
+        localStorage.clear();
+        navigate("/login")
     }
 
     const handleCreateCourse = async () => {
@@ -84,12 +87,6 @@ function Home() {
             }
         }
     };
-
-
-    function handleLogout() {
-        localStorage.clear();
-        navigate("/login")
-    }
 
     return (
             <>
