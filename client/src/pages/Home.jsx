@@ -46,7 +46,7 @@ function Home() {
             }
         }
         fetchUserCourses();
-    }, [userData]);
+    }, []);
 
     const handleCancelModal = () => {
         setCourseName("");
@@ -75,10 +75,11 @@ function Home() {
                 const userData = await axios.post(addToUserCourses, newCourse);
                 if (allData.data.status && userData.data.status){
                     // update the list of user courses
-                    setUserCourses([...userCourses, newCourse]);
+                    setUserCourses([...userCourses, userData.data]);
                     // update the list of all courses
-                    setAllCourses([...allCourses, newCourse]);
+                    setAllCourses([...allCourses, allData.data]);
                     handleCancelModal()
+                    toast.success('Course created successfully!', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000});
                 } else {
                     toast.error(allData.data.msg, toastOptions)
                     handleCancelModal()

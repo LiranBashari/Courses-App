@@ -10,8 +10,8 @@ function Courses(props) {
     const [userData, setUserData] = useState({})
     const navigate = useNavigate()
     // convert the object to an array and sort alphabetically by course name
-    const userCourses = Object.values(props.userCourses).sort((a, b) => a.name.localeCompare(b.name));
-
+    // const userCourses = Object.values(props.userCourses).sort((a, b) => a.name.localeCompare(b.name));
+    const userCourses = Object.values(props.userCourses)
 
     useEffect(()=>{
         async function fetchUserData(){
@@ -23,19 +23,16 @@ function Courses(props) {
 
 
     async function handleRemove(course) {
-        const confirmRemove = window.confirm('Are you sure you want to remove this course?');
-        if (confirmRemove) {
-            try {
-                const data = await axios.post(removeFromUserCourses, { userID: userData._id, courseId: course._id });
-                if (data.data.status) {
-                    // update the list of user courses
-                    props.setUserCourses(userCourses.filter((c) => c._id !== course._id));
-                    // show a success message
-                    toast.success('Course removed successfully!', { position: toast.POSITION.TOP_RIGHT });
-                }
-            } catch (e) {
-                console.error(e);
+        try {
+            const data = await axios.post(removeFromUserCourses, { userID: userData._id, courseID: course._id });
+            if (data.data.status) {
+                // update the list of user courses
+                props.setUserCourses(prevUserCourses => prevUserCourses.filter((c) => c._id !== course._id));
+                // show a success message
+                toast.success('Course removed successfully!', { position: toast.POSITION.BOTTOM_RIGHT,autoClose:1500 });
             }
+        } catch (e) {
+            console.error(e);
         }
     }
 

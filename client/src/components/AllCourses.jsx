@@ -2,14 +2,15 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
 import {addToUserCourses} from "../routes";
-import {useNavigate} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import {useNavigate} from "react-router-dom";
+
 
 function AllCourses(props) {
     const [userData, setUserData] = useState({})
     const allCourses = Object.values(props.allCourses);
-    const userCourses = Object.values(props.userCourses).sort((a, b) => a.name.localeCompare(b.name));
+    const userCourses = Object.values(props.userCourses)//.sort((a, b) => a.name.localeCompare(b.name));
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -35,7 +36,7 @@ function AllCourses(props) {
         const data = await axios.post(addToUserCourses, newCourse);
         if (data.data.status) {
             // update the list of user courses
-            props.setUserCourses([...userCourses, newCourse]);
+            props.setUserCourses([...userCourses, {_id: course._id, name:course.name, description: course.description}]);
             toast.success('Course added successfully!', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000});
         }
     }

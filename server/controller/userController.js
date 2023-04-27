@@ -96,7 +96,7 @@ module.exports.addToUserCourses = async (req, res) => {
 
 module.exports.removeFromUserCourses = async (req, res) => {
     try {
-        const { userID, courseID } = req.body;
+        const {userID, courseID} = req.body;
 
         // remove the course from the user's courses array
         const user = await User.findByIdAndUpdate(
@@ -104,7 +104,7 @@ module.exports.removeFromUserCourses = async (req, res) => {
             { $pull: { courses: courseID } },
             { new: true }
         );
-        return res.json({ user, status: true });
+        return res.json({user, status: true});
     } catch (e) {
         console.error(e);
         return res.status(500).json({ error: 'Server error' });
