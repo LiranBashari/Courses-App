@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import Logo from "../logo.svg"
 import Courses from "../components/Courses";
 import AllCourses from "../components/AllCourses"
-import {getCourses, getUserCourses, addToAllCourses} from "../routes";
+import {getCourses, getUserCourses, addToAllCourses, addToUserCourses} from "../routes";
 import axios from "axios";
 import Modal from 'react-modal';
 import {ToastContainer, toast} from "react-toastify"
@@ -72,7 +72,8 @@ function Home() {
             try {
                 // send to server for validation and save in DB
                 const allData = await axios.post(addToAllCourses, newCourse);
-                if (allData.data.status){
+                const userData = await axios.post(addToUserCourses, newCourse);
+                if (allData.data.status && userData.data.status){
                     // update the list of user courses
                     setUserCourses([...userCourses, newCourse]);
                     // update the list of all courses
@@ -109,7 +110,7 @@ function Home() {
                         </div>
                     </div>
                     {showAllCourses ? (
-                        <AllCourses allCourses={allCourses}/>
+                        <AllCourses allCourses={allCourses} userCourses={userCourses} setUserCourses={setUserCourses}/>
                     ) : (
                         <div className="body-container">
                             <Courses userCourses={userCourses}/>

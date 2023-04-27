@@ -60,10 +60,9 @@ module.exports.getAllCourses = async (req, res) => {
     }
 };
 
-module.exports.addCourse = async (req, res) => {
+module.exports.addToAllCourses = async (req, res) => {
     try {
-        const {userID, name, description} = req.body;
-
+        const {name, description} = req.body;
         // check if the course exists
         const course = await Courses.findOne({name:name});
         if (course) return res.json({status: false, msg:"Course already exists"});
@@ -71,14 +70,26 @@ module.exports.addCourse = async (req, res) => {
         // create the new course
         const newCourse = await Courses.create({name:name, description:description});
 
+        return res.json({newCourse, status:true});
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+module.exports.addToUserCourses = async (req, res) => {
+    try {
+        const {userID, name} = req.body;
+
+        // check if the course exists
+        const course = await Courses.findOne({name:name});
+        console.log("course._id",course._id)
         // add the new course to the user's courses array
         const user = await User.findByIdAndUpdate(
             userID,
-            { $push: { courses: newCourse._id } },
+            { $push: { courses: course._id } },
             { new: true }
         );
-
-        return res.json({newCourse, user, status:true});
+        return res.json({user, status:true});
     } catch (e) {
         console.error(e);
     }
