@@ -70,7 +70,7 @@ module.exports.addToAllCourses = async (req, res) => {
         // create the new course
         const newCourse = await Courses.create({name:name, description:description});
 
-        return res.json({newCourse, status:true});
+        return res.json({newCourse:newCourse, status:true});
     } catch (e) {
         console.error(e);
     }

@@ -24,6 +24,10 @@ function Courses(props) {
 
     async function handleRemove(course) {
         try {
+            if (!course) {
+                console.error('Course object is undefined');
+                return;
+            }
             const data = await axios.post(removeFromUserCourses, { userID: userData._id, courseID: course._id });
             if (data.data.status) {
                 // update the list of user courses
@@ -35,6 +39,7 @@ function Courses(props) {
             console.error(e);
         }
     }
+
 
 
 

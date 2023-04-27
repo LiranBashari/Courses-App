@@ -74,10 +74,11 @@ function Home() {
                 const allData = await axios.post(addToAllCourses, newCourse);
                 const userData = await axios.post(addToUserCourses, newCourse);
                 if (allData.data.status && userData.data.status){
+                    console.log("the new course added is: ",allData.data.newCourse)
                     // update the list of user courses
-                    setUserCourses([...userCourses, userData.data]);
+                    setUserCourses([...userCourses, allData.data.newCourse]);
                     // update the list of all courses
-                    setAllCourses([...allCourses, allData.data]);
+                    setAllCourses([...allCourses, allData.data.newCourse]);
                     handleCancelModal()
                     toast.success('Course created successfully!', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000});
                 } else {
