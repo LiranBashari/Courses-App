@@ -113,7 +113,7 @@ function Home() {
                         <AllCourses allCourses={allCourses} userCourses={userCourses} setUserCourses={setUserCourses}/>
                     ) : (
                         <div className="body-container">
-                            <Courses userCourses={userCourses}/>
+                            <Courses userCourses={userCourses} setUserCourses={setUserCourses}/>
                         </div>
                     )}
                     <Modal

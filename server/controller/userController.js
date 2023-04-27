@@ -82,7 +82,6 @@ module.exports.addToUserCourses = async (req, res) => {
 
         // check if the course exists
         const course = await Courses.findOne({name:name});
-        console.log("course._id",course._id)
         // add the new course to the user's courses array
         const user = await User.findByIdAndUpdate(
             userID,
@@ -94,5 +93,27 @@ module.exports.addToUserCourses = async (req, res) => {
         console.error(e);
     }
 };
+
+module.exports.removeFromUserCourses = async (req, res) => {
+    try {
+        const { userID, courseID } = req.body;
+
+        // remove the course from the user's courses array
+        const user = await User.findByIdAndUpdate(
+            userID,
+            { $pull: { courses: courseID } },
+            { new: true }
+        );
+        return res.json({ user, status: true });
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
+
+
 
 

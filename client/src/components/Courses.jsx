@@ -1,33 +1,69 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
 import styled from "styled-components";
+import axios from "axios";
+import {removeFromUserCourses} from "../routes";
+import {useNavigate} from "react-router-dom";
+import {ToastContainer, toast} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
 function Courses(props) {
+    const [userData, setUserData] = useState({})
+    const navigate = useNavigate()
     // convert the object to an array and sort alphabetically by course name
     const userCourses = Object.values(props.userCourses).sort((a, b) => a.name.localeCompare(b.name));
 
-    function handleRemove(event) {
-        console.log(event)
+
+    useEffect(()=>{
+        async function fetchUserData(){
+            if (!localStorage.getItem("Courses")) navigate("/login");
+            else setUserData(JSON.parse(localStorage.getItem("Courses")));
+        }
+        fetchUserData();
+    }, [])
+
+
+    async function handleRemove(course) {
+        const confirmRemove = window.confirm('Are you sure you want to remove this course?');
+        if (confirmRemove) {
+            try {
+                const data = await axios.post(removeFromUserCourses, { userID: userData._id, courseId: course._id });
+                if (data.data.status) {
+                    // update the list of user courses
+                    props.setUserCourses(userCourses.filter((c) => c._id !== course._id));
+                    // show a success message
+                    toast.success('Course removed successfully!', { position: toast.POSITION.TOP_RIGHT });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
     }
 
+
+
     return (
-        <Container>
-            <table>
-                <thead>
-                <tr>
-                    <th style={{ width: "30%" }}>Course Name</th>
-                    <th style={{ width: "70%" }} colSpan={2}>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                {userCourses.map((course, index) => (
-                    <tr key={index}>
-                        <td style={{ width: "30%", fontWeight: "bold" }}>{course.name}</td>
-                        <td style={{ width: "70%" }}>{course.description}</td>
-                        <td> <button onClick={(event => handleRemove(event))} className="remove">Remove</button> </td>
+        <>
+            <Container>
+                <table>
+                    <thead>
+                    <tr>
+                        <th style={{ width: "30%" }}>Course Name</th>
+                        <th style={{ width: "70%" }} colSpan={2}>Description</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
-        </Container>
+                    </thead>
+                    <tbody>
+                    {userCourses.map((course, index) => (
+                        <tr key={index}>
+                            <td style={{ width: "30%", fontWeight: "bold" }}>{course.name}</td>
+                            <td style={{ width: "70%" }}>{course.description}</td>
+                            <td> <button onClick={() => handleRemove(course)} className="remove">Remove</button> </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </Container>
+            <ToastContainer/>
+        </>
     );
 }
 export default Courses;

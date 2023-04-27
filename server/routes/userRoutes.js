@@ -1,4 +1,4 @@
-const {login, register, getUserCourses, getAllCourses, addToAllCourses, addToUserCourses} = require("../controller/userController")
+const {login, register, getUserCourses, getAllCourses, addToAllCourses, addToUserCourses, removeFromUserCourses} = require("../controller/userController")
 
 const router = require("express").Router();
 
@@ -8,6 +8,8 @@ router.get("/allcourses", getAllCourses)
 router.post("/usercourses", getUserCourses)
 router.post("/addallcourse", addToAllCourses)
 router.post("/addusercourse", addToUserCourses)
+router.post("/removeusercourses", removeFromUserCourses)
+
 
 
 module.exports = router

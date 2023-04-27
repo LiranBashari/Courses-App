@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import axios from "axios";
 import {addToUserCourses} from "../routes";
+import {useNavigate} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import {useNavigate} from "react-router-dom";
 
 function AllCourses(props) {
     const [userData, setUserData] = useState({})
@@ -36,7 +36,8 @@ function AllCourses(props) {
         if (data.data.status) {
             // update the list of user courses
             props.setUserCourses([...userCourses, newCourse]);
-        } else toast.error(data.data.msg)
+            toast.success('Course added successfully!', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000});
+        }
     }
 
     return (
