@@ -28,6 +28,10 @@ function AllCourses(props) {
 
 
     async function handleAdd(course) {
+        if (!course) {
+            console.error('Course object is undefined');
+            return;
+        }
         const newCourse = {
             userID: userData._id,
             name: course.name,
