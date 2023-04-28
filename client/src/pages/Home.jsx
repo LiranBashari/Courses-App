@@ -74,7 +74,6 @@ function Home() {
                 const allData = await axios.post(addToAllCourses, newCourse);
                 const userData = await axios.post(addToUserCourses, newCourse);
                 if (allData.data.status && userData.data.status){
-                    console.log("the new course added is: ",allData.data.newCourse)
                     // update the list of user courses
                     setUserCourses([...userCourses, allData.data.newCourse]);
                     // update the list of all courses
