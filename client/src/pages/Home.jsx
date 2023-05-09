@@ -9,7 +9,7 @@ import axios from "axios";
 import Modal from 'react-modal';
 import {ToastContainer, toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { Button, AppBar, Toolbar, Typography} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 
 function Home() {
     const [userData, setUserData] = useState({})
@@ -17,10 +17,10 @@ function Home() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [courseName, setCourseName] = useState('');
     const [courseDescription, setCourseDescription] = useState('');
-    const navigate = useNavigate()
     const [allCourses, setAllCourses] = useState([]);
     const [userCourses, setUserCourses] = useState([]);
     const toastOptions = {position:"bottom-right", pauseOnHover:true, draggable:true}
+    const navigate = useNavigate()
 
     useEffect(()=>{
         async function fetchUserData(){
@@ -172,7 +172,7 @@ function Home() {
                                         fontSize: '1.2rem',
                                         borderRadius: '0.5rem',
                                         width: '100%',
-                                        resize: 'vertical', /* set vertical resize only */
+                                        resize: 'vertical',
                                     }}
                                 />
                             </label>
@@ -224,10 +224,10 @@ export default Home;
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
-  background-color: #b7edfc;
+  background-color: whitesmoke;
 
   .header {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgb(174, 216, 250);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -293,5 +293,6 @@ const Container = styled.div`
   .body-container > :first-child {
     width: 100%;
   }
+
 
 `;

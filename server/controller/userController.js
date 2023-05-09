@@ -41,11 +41,10 @@ module.exports.register = async (req, res) => {
 module.exports.getUserCourses = async (req, res) => {
     try {
         const userID = req.body.userData
-        console.log("userID ",userID)
         // find the users and populate the courses field
         const userCourses = await User.findById(userID._id).populate('courses');
-        if (!userCourses) res.json({msg: "Can not fund user courses", status:false});
-        return res.json({userCourses, status:true});
+        if (!userCourses) res.json({msg: "Can not find user courses", status:false});
+        else return res.json({userCourses, status:true});
     } catch (e) {
         console.error(e);
     }
@@ -66,11 +65,11 @@ module.exports.addToAllCourses = async (req, res) => {
         // check if the course exists
         const course = await Courses.findOne({name:name});
         if (course) return res.json({status: false, msg:"Course already exists"});
-
         // create the new course
-        const newCourse = await Courses.create({name:name, description:description});
-
-        return res.json({newCourse:newCourse, status:true});
+        else {
+            const newCourse = await Courses.create({name:name, description:description});
+            return res.json({newCourse:newCourse, status:true});
+        }
     } catch (e) {
         console.error(e);
     }
