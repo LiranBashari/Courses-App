@@ -15,6 +15,7 @@ function Login() {
     })
     const toastOptions = {position:"bottom-right", pauseOnHover:true, draggable:true}
     const navigate = useNavigate()
+
     function handleChange(event) {
         setValues({...values, [event.target.name]: event.target.value});
     }
@@ -36,7 +37,7 @@ function Login() {
             const {username, password} = values
             // check if user exist or not
             const data = await axios.post(login, {username,password})
-            if (data === false) toast.error(data.msg,toastOptions)
+            if (data.data.status === false) toast.error(data.data.msg, toastOptions)
             else {
                 localStorage.setItem("Courses", JSON.stringify(data.data.user))
                 navigate("/")

@@ -44,7 +44,7 @@ function Register() {
         if (isValid()){
             // send it to the server for saving the data in DB
             const data = await axios.post(register, values)
-            if (data.status === false) toast.error(data.msg, toastOptions);
+            if (data.data.status === false) toast.error(data.data.msg, toastOptions);
             else {
                 localStorage.setItem('Courses', JSON.stringify(data.data.newUser));
                 navigate('/');
