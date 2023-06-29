@@ -25,7 +25,9 @@ function Home() {
     useEffect(()=>{
         async function fetchUserData(){
             if (!localStorage.getItem("Courses")) navigate("/login");
-            else setUserData(JSON.parse(localStorage.getItem("Courses")));
+            else {
+                setUserData(JSON.parse(localStorage.getItem("Courses")));
+            }
         }
         fetchUserData();
     }, [])
@@ -36,7 +38,7 @@ function Home() {
             setAllCourses(courses.data.courses);
         }
         fetchCourses();
-    }, []);
+    }, [userCourses, allCourses]);
 
     useEffect(() => {
         async function fetchUserCourses() {
@@ -46,7 +48,7 @@ function Home() {
             }
         }
         fetchUserCourses();
-    }, []);
+    }, [userCourses, allCourses]);
 
     const handleCancelModal = () => {
         setCourseName("");
