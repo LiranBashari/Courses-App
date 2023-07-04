@@ -38,7 +38,7 @@ function Home() {
             setAllCourses(courses.data.courses);
         }
         fetchCourses();
-    }, [userCourses, allCourses]);
+    }, [allCourses]);
 
     useEffect(() => {
         async function fetchUserCourses() {
